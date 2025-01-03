@@ -4,9 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace FA.JustBlog.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "BlogOwner")]
+    
     public class HomeController : Controller
     {
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult AdminHome()
         {
             return View();

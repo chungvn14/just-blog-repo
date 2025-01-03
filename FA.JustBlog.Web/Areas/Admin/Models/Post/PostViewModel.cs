@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace FA.JustBlog.Web.Areas.Admin.Models
+namespace FA.JustBlog.Web.Areas.Admin.Models.Post
 {
     public class PostViewModel
     {

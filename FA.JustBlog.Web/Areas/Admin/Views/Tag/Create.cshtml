@@ -1,0 +1,89 @@
+﻿@model FA.JustBlog.Web.Areas.Admin.Models.Tag.TagCreateModel
+@{
+    ViewData["Title"] = "Create Tag";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="my-4 text-center text-primary">Create Tag</h1>
+
+<h4 class="text-center text-muted">Tag Information</h4>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10 col-sm-12">
+        <form asp-action="Create" method="post" class="p-4 border rounded shadow-sm">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <!-- Name -->
+            <div class="form-group mb-3">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" placeholder="Enter the tag name here" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <!-- URL Slug -->
+            <div class="form-group mb-3">
+                <label asp-for="UrlSlug" class="control-label"></label>
+                <input asp-for="UrlSlug" class="form-control" placeholder="Enter the URL slug" />
+                <span asp-validation-for="UrlSlug" class="text-danger"></span>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group mb-3">
+                <label asp-for="Description" class="control-label"></label>
+                <textarea id="description" asp-for="Description" class="form-control" rows="5" placeholder="Enter the description"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group text-center mb-3">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Create Tag</button>
+            </div>
+
+            <!-- Back to List Link -->
+            <div class="form-group text-center mt-4">
+                <a asp-action="Index" class="btn btn-link">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .container-fluid {
+        padding: 20px;
+    }
+
+    .form-control {
+        font-size: 16px;
+        padding: 10px;
+    }
+
+    .form-group label {
+        font-weight: bold;
+    }
+
+    .btn-primary {
+        font-size: 18px;
+        padding: 10px 20px;
+    }
+
+    .btn-link {
+        font-size: 16px;
+        color: #007bff;
+        text-decoration: none;
+    }
+
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
+    textarea.form-control {
+        resize: none;
+    }
+</style>
+
+@section scripts {
+    <script>
+        CKEDITOR.replace("description");
+    </script>
+}

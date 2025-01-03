@@ -1,0 +1,45 @@
+﻿@model FA.JustBlog.Core.Models.Category
+
+@{
+    ViewData["Title"] = "Category Details";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="mb-4 text-center">Category Details</h1>
+
+<div class="card shadow-sm border-light">
+    <div class="card-body">
+        <h4 class="text-primary">Category Information</h4>
+        <hr />
+
+        <dl class="row">
+            <!-- Name -->
+            <dt class="col-sm-3"><strong>@Html.DisplayNameFor(model => model.Name)</strong></dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Name)</dd>
+
+            <!-- URL Slug -->
+            <dt class="col-sm-3"><strong>@Html.DisplayNameFor(model => model.UrlSlug)</strong></dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.UrlSlug)</dd>
+
+            <!-- Description -->
+            <dt class="col-sm-3"><strong>@Html.DisplayNameFor(model => model.Description)</strong></dt>
+            <dd class="col-sm-9">@Html.Raw(Model.Description)</dd>
+        </dl>
+
+        <div class="d-flex justify-content-between mt-4">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-lg">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary btn-lg">Back to List</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 8px;
+    }
+
+    .btn-lg {
+        font-size: 16px;
+        font-weight: bold;
+    }
+</style>

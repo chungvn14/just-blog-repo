@@ -3,14 +3,14 @@ using FA.JustBlog.Core.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using FA.JustBlog.Web.Areas.Admin.Models;
 using Microsoft.AspNetCore.Authorization;
+using FA.JustBlog.Web.Areas.Admin.Models.Post;
 
 
 namespace FA.JustBlog.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "BlogOwner")]
+   
     public class PostController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -21,6 +21,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Post
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Index(string filter)
         {
             // Xử lý bộ lọc
@@ -74,6 +75,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
 
 
         // GET: Admin/Post/Details/5
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Details(int? id)
         {
             if (id == null)
@@ -92,6 +94,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
 
 
         // GET: Create
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Create()
         {
             // Lấy danh sách các Category từ cơ sở dữ liệu và truyền vào View
@@ -105,6 +108,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Create(PostCreateModel model)
         {
             if (ModelState.IsValid)
@@ -152,6 +156,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Edit
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Edit(int id)
         {
             var post = _unitOfWork.Posts.Find(id);
@@ -183,6 +188,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         // POST: Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Edit(int id, PostViewModel model)
         {
             if (id != model.Id)
@@ -239,6 +245,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
 
 
         // GET: Admin/Post/Delete/5
+        [Authorize(Roles = "BlogOwner")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -258,6 +265,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         // POST: Admin/Post/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "BlogOwner")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var post = _unitOfWork.Posts.Find(id);  // Thay vì _context.Posts

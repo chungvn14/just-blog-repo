@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace FA.JustBlog.Core.Models
+namespace FA.JustBlog.Web.Areas.Admin.Models.Category
 {
-    public class Tag
+    public class CategoryEditModel
     {
         public int Id { get; set; }
 
@@ -18,9 +16,5 @@ namespace FA.JustBlog.Core.Models
 
         [StringLength(500, ErrorMessage = "The Description must be less than 500 characters.")]
         public string Description { get; set; }
-
-        public int Count { get; set; }
-
-        public virtual ICollection<PostTagMap> PostTagMaps { get; set; }
     }
 }
