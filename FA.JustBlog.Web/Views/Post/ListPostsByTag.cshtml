@@ -1,0 +1,54 @@
+﻿@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "ListPostsByTag";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .card-body {
+        flex-grow: 1;
+    }
+</style>
+
+@model IList<FA.JustBlog.Core.Models.Post>
+
+<h2 class="text-center mb-4">Posts for Tag: @Context.Request.Query["tag"]</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p class="text-center text-muted">No posts found for this tag.</p>
+}
+else
+{
+    <div class="row">
+        @foreach (var post in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <!-- URL thân thiện sử dụng năm, tháng, và UrlSlug -->
+                            <a asp-action="Details" asp-controller="Post"
+                               asp-route-year="@post.PostedOn.Year"
+                               asp-route-month="@post.PostedOn.Month.ToString("00")"
+                               asp-route-title="@post.UrlSlug"
+                               class="text-decoration-none">
+                                @post.Title
+                            </a>
+                        </h5>
+                        <p class="card-text">@post.ShortDescription</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <span>Posted on @post.PostedOn.ToString("MMMM dd, yyyy")</span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

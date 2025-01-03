@@ -1,0 +1,20 @@
+﻿@model IList<FA.JustBlog.Core.Models.Post>
+
+@{
+    ViewData["Title"] = "Latest Posts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <!-- Posts Section -->
+        <div class="col-lg-9">
+            <h3>Most Viewed Posts</h3>
+            @Html.Partial("_PartialListPosts", Model)
+        </div>
+       
+    </div>
+  
+</div>
+
+

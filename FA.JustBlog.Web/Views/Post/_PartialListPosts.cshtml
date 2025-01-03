@@ -1,0 +1,72 @@
+﻿@model FA.JustBlog.Web.Models.PostListViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .card-body {
+        flex-grow: 1;
+    }
+</style>
+
+<h3>Most Viewed Posts</h3>
+<div class="row">
+    @foreach (var post in Model.MostViewedPosts.OrderByDescending(p => p.ViewCount).ThenByDescending(p => p.PostedOn))
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">@post.Title</h5>
+                    <p>
+                        <small>
+                            Posted @post.PostedOn.ToFriendlyTime()
+                            with rate @post.TotalRate by @post.ViewCount view(s)
+                        </small>
+                    </p>
+                    <p class="card-text">@post.ShortDescription</p>
+                    <a class="btn btn-primary" asp-action="Details" asp-route-year="@post.PostedOn.Year"
+                       asp-route-month="@post.PostedOn.Month.ToString("00")"
+                       asp-route-title="@post.UrlSlug">Read More</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<h3>Latest Posts</h3>
+<div class="row">
+    @foreach (var post in Model.LatestPosts.OrderByDescending(p => p.PostedOn))
+    {
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">@post.Title</h5>
+                    <p>
+                        <small>
+                            Posted @post.PostedOn.ToFriendlyTime()
+                            with rate @post.TotalRate by @post.ViewCount view(s)
+                        </small>
+                    </p>
+                    <p class="card-text">@post.ShortDescription</p>
+                    <a class="btn btn-primary" asp-action="Details" asp-route-year="@post.PostedOn.Year"
+                       asp-route-month="@post.PostedOn.Month.ToString("00")"
+                       asp-route-title="@post.UrlSlug">Read More</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Add button row -->
+<div class="row justify-content-center">
+    <div class="col-auto">
+        <a asp-controller="Post" asp-action="Index" class="btn btn-primary">View all posts</a>
+    </div>
+</div>

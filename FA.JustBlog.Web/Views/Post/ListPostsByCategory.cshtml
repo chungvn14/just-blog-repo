@@ -1,0 +1,54 @@
+﻿@model IList<FA.JustBlog.Core.Models.Post>
+<style>
+    .card {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .card-body {
+        flex-grow: 1;
+    }
+</style>
+
+<h2>Posts in category: @Context.Request.Query["category"]</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info" role="alert">
+        Không có bài viết nào trong danh mục này.
+    </div> <!-- Hiển thị thông báo khi không có bài viết -->
+}
+else
+{
+    <div class="row">
+        @foreach (var post in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <!-- Thêm cột Bootstrap cho bài viết -->
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <!-- URL thân thiện sử dụng năm, tháng, và UrlSlug -->
+                            <a asp-action="Details" asp-controller="Post"
+                               asp-route-year="@post.PostedOn.Year"
+                               asp-route-month="@post.PostedOn.Month.ToString("00")"
+                               asp-route-title="@post.UrlSlug">
+                                @post.Title
+                            </a>
+                        </h5>
+                        <p class="card-text">@post.ShortDescription</p>
+                        <a asp-action="Details" asp-controller="Post"
+                           asp-route-year="@post.PostedOn.Year"
+                           asp-route-month="@post.PostedOn.Month.ToString("00")"
+                           asp-route-title="@post.UrlSlug"
+                           class="btn btn-primary">Xem chi tiết</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <small>Ngày đăng: @post.PostedOn.ToString("dd/MM/yyyy")</small> <!-- Ngày đăng bài viết -->
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

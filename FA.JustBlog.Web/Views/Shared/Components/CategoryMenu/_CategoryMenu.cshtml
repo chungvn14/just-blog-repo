@@ -1,0 +1,10 @@
+﻿@model IList<FA.JustBlog.Core.Models.Category>
+
+@foreach (var category in Model)
+{
+    <li class="nav-item">
+        <a class="nav-link" href="@Url.Action("ListPostsByCategory", "Post", new { categoryId = category.Id })">
+            @category.Name
+        </a>
+    </li>
+}

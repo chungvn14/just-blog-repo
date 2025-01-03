@@ -1,0 +1,34 @@
+﻿@model IEnumerable<FA.JustBlog.Core.Models.Post>
+
+@{
+    ViewData["Title"] = "All posts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>All posts!</h1>
+
+@foreach (var post in Model)
+{
+    <div style="border-bottom: 1px solid #ccc; padding: 15px 0;">
+        <!-- Tiêu đề bài viết -->
+        <h2>
+            <a asp-action="Details" asp-controller="Post"
+               asp-route-year="@post.PostedOn.Year"
+               asp-route-month="@post.PostedOn.Month.ToString("00")"
+               asp-route-title="@post.UrlSlug">
+                @post.Title
+            </a>
+        </h2>
+
+        <!-- Thông tin ngày đăng, đánh giá, lượt xem -->
+        <p>
+            <small>
+                Posted @post.PostedOn.ToFriendlyTime()
+                with rate @post.TotalRate by @post.ViewCount view(s)
+            </small>
+        </p>
+
+        <!-- Nội dung bài viết -->
+        <p>@post.PostContent</p>
+    </div>
+}

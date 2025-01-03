@@ -1,0 +1,177 @@
+﻿@model FA.JustBlog.Web.Areas.Admin.Models.PostViewModel
+
+@{
+    ViewData["Title"] = "Edit Post";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="my-4 text-center text-primary">Edit Post</h1>
+
+<h4 class="text-center text-muted mb-4">Edit your post content below</h4>
+<hr />
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <form asp-action="Edit">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <!-- Title -->
+            <div class="form-group mb-4">
+                <label asp-for="Title" class="control-label text-dark">Post Title</label>
+                <input asp-for="Title" class="form-control form-control-lg" placeholder="Enter the title here" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <!-- Short Description -->
+            <div class="form-group mb-4">
+                <label asp-for="ShortDescription" class="control-label text-dark">Short Description</label>
+                <input asp-for="ShortDescription" class="form-control form-control-lg" placeholder="Enter a brief description" />
+                <span asp-validation-for="ShortDescription" class="text-danger"></span>
+            </div>
+
+            <!-- Post Content -->
+            <div class="form-group mb-4">
+                <label asp-for="PostContent" class="control-label text-dark">Post Content</label>
+                <textarea asp-for="PostContent" class="form-control" id="PostContent" placeholder="Edit your content here..."></textarea>
+                <span asp-validation-for="PostContent" class="text-danger"></span>
+            </div>
+
+            <!-- Category -->
+            <div class="form-group mb-4">
+                <label asp-for="CategoryId" class="control-label text-dark">Category</label>
+                <select asp-for="CategoryId" class="form-control form-control-lg" asp-items="ViewBag.CategoryId"></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-4">
+                <label asp-for="Tags" class="control-label">Tags</label>
+                <div class="row">
+                    @foreach (var item in ViewBag.Tags as IEnumerable<SelectListItem>)
+                    {
+                        <div class="col-md-4">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="@item.Value" id="tag-@item.Value" name="Tags"
+                                @if (Model.Tags?.Contains(int.Parse(item.Value)) == true)
+                                {
+                                    <text>checked</text>
+                                }>
+                                <label class="form-check-label" for="tag-@item.Value">
+                                    @item.Text
+                                </label>
+                            </div>
+                        </div>
+                    }
+                </div>
+                <span asp-validation-for="Tags" class="text-danger"></span>
+            </div>
+
+
+            <!-- Published -->
+            <div class="form-group mb-4">
+                <label asp-for="Published" class="control-label text-dark">Published</label>
+                <div class="form-check">
+                    <input asp-for="Published" type="checkbox" class="form-check-input" />
+                    <label class="form-check-label" for="Published">Publish this post</label>
+                </div>
+                <span asp-validation-for="Published" class="text-danger"></span>
+            </div>
+
+            <!-- Posted On -->
+            <div class="form-group mb-4">
+                <label asp-for="PostedOn" class="control-label text-dark">Post Date</label>
+                <input asp-for="PostedOn" type="date" class="form-control form-control-lg" />
+                <span asp-validation-for="PostedOn" class="text-danger"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group mb-4">
+                <button type="submit" class="btn btn-success btn-lg btn-block">Save Post</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="form-group text-center">
+    <a asp-action="Index" class="btn btn-link text-primary">Back to List</a>
+</div>
+
+<style>
+    #PostContent {
+        width: 100%;
+        height: 350px;
+        border-radius: 8px;
+        padding: 10px;
+        font-size: 16px;
+        font-family: 'Arial', sans-serif;
+        box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-control {
+        border-radius: 8px;
+    }
+
+    .form-check-label {
+        font-size: 1.1em;
+    }
+
+    .btn-primary, .btn-success {
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    h1, h4 {
+        font-family: 'Roboto', sans-serif;
+    }
+</style>
+
+<!-- CKEditor Script -->
+<script src="https://cdn.ckeditor.com/ckeditor5/38.0.0/classic/ckeditor.js"></script>
+<script>
+    ClassicEditor
+        .create(document.querySelector('#PostContent'), {
+            toolbar: [
+                'undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikethrough', 'link', '|',
+                'blockQuote', 'code', 'codeBlock', '|', 'bulletedList', 'numberedList', 'outdent', 'indent', '|',
+                'alignment', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
+                'insertTable', 'mediaEmbed', 'imageUpload', '|',
+                'horizontalLine', 'specialCharacters', 'highlight', '|',
+                'findAndReplace', 'selectAll'
+            ],
+            language: 'en',
+            placeholder: 'Edit your content here...',
+            fontSize: {
+                options: ['tiny', 'small', 'default', 'big', 'huge'],
+                supportAllValues: true
+            },
+            fontFamily: {
+                options: [
+                    'default',
+                    'Arial, Helvetica, sans-serif',
+                    'Courier New, Courier, monospace',
+                    'Georgia, serif',
+                    'Times New Roman, Times, serif',
+                    'Verdana, Geneva, sans-serif'
+                ],
+                supportAllValues: true
+            },
+            image: {
+                styles: ['alignLeft', 'alignCenter', 'alignRight', 'full', 'side'],
+                toolbar: [
+                    'imageTextAlternative', 'imageStyle:alignLeft', 'imageStyle:alignCenter',
+                    'imageStyle:alignRight', '|', 'resizeImage', 'linkImage'
+                ],
+                resizeOptions: [
+                    { name: 'resizeImage:original', label: 'Original', value: null },
+                    { name: 'resizeImage:50', label: '50%', value: '50' },
+                    { name: 'resizeImage:75', label: '75%', value: '75' }
+                ],
+                upload: { types: ['jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'] }
+            },
+            mediaEmbed: { previewsInData: true },
+            table: { contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableCellProperties', 'tableProperties'] },
+            simpleUpload: { uploadUrl: '/api/upload', headers: { 'X-CSRF-TOKEN': 'YOUR_CSRF_TOKEN' } }
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script>

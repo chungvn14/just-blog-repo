@@ -1,0 +1,78 @@
+﻿@model FA.JustBlog.Core.Models.Post
+
+@{
+    ViewData["Title"] = "Post Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-center mb-4">Post Details</h1>
+
+<div class="card shadow-sm p-4">
+    <h4 class="card-title text-primary">@Model.Title</h4>
+    <hr />
+
+    <div class="row mb-3">
+        <div class="col-sm-3 font-weight-bold">Short Description:</div>
+        <div class="col-sm-9">@Model.ShortDescription</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-3 font-weight-bold">Post Content:</div>
+        <div class="col-sm-9">  @Html.Raw(Model.PostContent)</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-3 font-weight-bold">URL Slug:</div>
+        <div class="col-sm-9">@Model.UrlSlug</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-3 font-weight-bold">Published:</div>
+        <div class="col-sm-9">
+            @if (Model.Published)
+            {
+                <span>Published</span>
+            }
+            else
+            {
+                <span>Unpublished</span>
+            }
+        </div>
+    </div>
+
+
+    <div class="row mb-3">
+        <div class="col-sm-3 font-weight-bold">Posted On:</div>
+        <div class="col-sm-9">@Model.PostedOn.ToString("MM/dd/yyyy hh:mm:ss tt")</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-3 font-weight-bold">Last Modified:</div>
+        <div class="col-sm-9">@Html.DisplayFor(model => model.Modified)</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-3 font-weight-bold">Category:</div>
+        <div class="col-sm-9">@Model.Category.Name</div>
+    </div>
+
+
+    <div class="row mb-3">
+        <div class="col-sm-3 font-weight-bold">Views:</div>
+        <div class="col-sm-9">@Model.ViewCount</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-3 font-weight-bold">Rate Count:</div>
+        <div class="col-sm-9">@Model.RateCount</div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-sm-3 font-weight-bold">Total Rate:</div>
+        <div class="col-sm-9">@Model.TotalRate</div>
+    </div>
+</div>
+
+<div class="mt-4 text-center">
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
