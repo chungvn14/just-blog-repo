@@ -5,6 +5,9 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
+
+
+
 <h1 class="my-4 text-center text-primary">Create Post</h1>
 
 <h4 class="text-center text-muted">Post Information</h4>
@@ -70,12 +73,12 @@
                 <span asp-validation-for="Published" class="text-danger"></span>
             </div>
 
-            <!-- Post Content (CKEditor) -->
             <div class="form-group mb-3">
                 <label asp-for="PostContent" class="control-label"></label>
-                <textarea asp-for="PostContent" class="form-control" id="PostContent" rows="100" placeholder="Start typing your content here..."></textarea>
+                <textarea id="postContent" asp-for="PostContent" class="form-control" id="PostContent" rows="10" placeholder="Start typing your content here..."></textarea>
                 <span asp-validation-for="PostContent" class="text-danger"></span>
             </div>
+           
 
             <!-- Submit Button -->
             <div class="form-group text-center mb-3">
@@ -89,68 +92,9 @@
     </div>
 </div>
 
-
-
-<!-- CKEditor Custom Style -->
-<style>
-    #PostContent {
-        width: 100%;
-        height: 100%; /* Adjust height as needed */
-    }
-</style>
-
 <!-- CKEditor Script -->
-<script src="https://cdn.ckeditor.com/ckeditor5/38.0.0/classic/ckeditor.js"></script>
-<script>
-    ClassicEditor
-        .create(document.querySelector('#PostContent'), {
-            toolbar: [
-                'undo', 'redo', '|', 'bold', 'italic', 'underline', 'strikethrough', 'link', '|',
-                'blockQuote', 'code', 'codeBlock', '|', 'bulletedList', 'numberedList', 'outdent', 'indent', '|',
-                'alignment', 'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
-                'insertTable', 'mediaEmbed', 'imageUpload', '|',
-                'horizontalLine', 'specialCharacters', 'highlight', '|',
-                'findAndReplace', 'selectAll'
-            ],
-            language: 'en',
-            placeholder: 'Start typing your content here...',
-            fontSize: {
-                options: ['tiny', 'small', 'default', 'big', 'huge'],
-                supportAllValues: true
-            },
-            fontFamily: {
-                options: [
-                    'default',
-                    'Arial, Helvetica, sans-serif',
-                    'Courier New, Courier, monospace',
-                    'Georgia, serif',
-                    'Times New Roman, Times, serif',
-                    'Verdana, Geneva, sans-serif'
-                ],
-                supportAllValues: true
-            },
-            image: {
-                styles: ['alignLeft', 'alignCenter', 'alignRight', 'full', 'side'],
-                toolbar: [
-                    'imageTextAlternative', 'imageStyle:alignLeft', 'imageStyle:alignCenter',
-                    'imageStyle:alignRight', '|', 'resizeImage', 'linkImage'
-                ],
-                resizeOptions: [
-                    { name: 'resizeImage:original', label: 'Original', value: null },
-                    { name: 'resizeImage:50', label: '50%', value: '50' },
-                    { name: 'resizeImage:75', label: '75%', value: '75' }
-                ],
-                upload: { types: ['jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'] }
-            },
-            mediaEmbed: { previewsInData: true },
-            table: { contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells', 'tableCellProperties', 'tableProperties'] },
-            simpleUpload: {
-                uploadUrl: '/api/upload', headers: {
-                    'X-CSRF-TOKEN': 'YOUR_CSRF_TOKEN'
-                }
-            }
-        })
-        .catch(error => {
-            console.error(error);
-        });
-</script>
+@section scripts {
+    <script>
+        CKEDITOR.replace("postContent");
+    </script>
+}
