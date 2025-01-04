@@ -4,6 +4,7 @@ using FA.JustBlog.Core.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FA.JustBlog.Core.Migrations
 {
     [DbContext(typeof(JustBlogContext))]
-    partial class JustBlogContextModelSnapshot : ModelSnapshot
+    [Migration("20250104142522_bdg")]
+    partial class bdg
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,7 +123,7 @@ namespace FA.JustBlog.Core.Migrations
                             Id = 1,
                             CommentHeader = "Great post on technology!",
                             CommentText = "I really enjoyed reading this article. Keep up the great work!",
-                            CommentTime = new DateTime(2025, 1, 2, 21, 34, 34, 387, DateTimeKind.Local).AddTicks(6418),
+                            CommentTime = new DateTime(2025, 1, 2, 21, 25, 21, 971, DateTimeKind.Local).AddTicks(6256),
                             Email = "john.doe@example.com",
                             Name = "John Doe",
                             PostId = 1
@@ -130,7 +133,7 @@ namespace FA.JustBlog.Core.Migrations
                             Id = 2,
                             CommentHeader = "Amazing insights",
                             CommentText = "This is exactly what I was looking for, thank you!",
-                            CommentTime = new DateTime(2025, 1, 3, 21, 34, 34, 387, DateTimeKind.Local).AddTicks(6430),
+                            CommentTime = new DateTime(2025, 1, 3, 21, 25, 21, 971, DateTimeKind.Local).AddTicks(6269),
                             Email = "jane.smith@example.com",
                             Name = "Jane Smith",
                             PostId = 1
@@ -140,7 +143,7 @@ namespace FA.JustBlog.Core.Migrations
                             Id = 3,
                             CommentHeader = "Very helpful health tips",
                             CommentText = "I found these health tips to be quite helpful. Thanks for sharing!",
-                            CommentTime = new DateTime(2025, 1, 1, 21, 34, 34, 387, DateTimeKind.Local).AddTicks(6432),
+                            CommentTime = new DateTime(2025, 1, 1, 21, 25, 21, 971, DateTimeKind.Local).AddTicks(6270),
                             Email = "mark.lee@example.com",
                             Name = "Mark Lee",
                             PostId = 2
@@ -208,9 +211,9 @@ namespace FA.JustBlog.Core.Migrations
                         {
                             Id = 1,
                             CategoryId = 1,
-                            Modified = new DateTime(2025, 1, 4, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6354),
+                            Modified = new DateTime(2025, 1, 4, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6194),
                             PostContent = "This post discusses the basics of ASP.NET Core development. ASP.NET Core is a cross-platform, high-performance framework for building modern, cloud-based, connected applications.",
-                            PostedOn = new DateTime(2024, 12, 28, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6347),
+                            PostedOn = new DateTime(2024, 12, 28, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6188),
                             Published = true,
                             RateCount = 10,
                             ShortDescription = "A brief overview of ASP.NET Core.",
@@ -223,9 +226,9 @@ namespace FA.JustBlog.Core.Migrations
                         {
                             Id = 2,
                             CategoryId = 1,
-                            Modified = new DateTime(2025, 1, 4, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6357),
+                            Modified = new DateTime(2025, 1, 4, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6197),
                             PostContent = "Generics in C# allow you to define a class or method with a placeholder for the type of data it stores or manipulates. In this post, we explore their usage, benefits, and limitations.",
-                            PostedOn = new DateTime(2024, 12, 30, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6357),
+                            PostedOn = new DateTime(2024, 12, 30, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6196),
                             Published = false,
                             RateCount = 5,
                             ShortDescription = "Deep dive into generics in C#.",
@@ -238,9 +241,9 @@ namespace FA.JustBlog.Core.Migrations
                         {
                             Id = 3,
                             CategoryId = 2,
-                            Modified = new DateTime(2025, 1, 4, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6360),
+                            Modified = new DateTime(2025, 1, 4, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6199),
                             PostContent = "In this post, we explore easy ways to stay healthy and active, including simple habits that can make a huge difference to your health and well-being.",
-                            PostedOn = new DateTime(2025, 1, 1, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6359),
+                            PostedOn = new DateTime(2025, 1, 1, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6199),
                             Published = true,
                             RateCount = 8,
                             ShortDescription = "Simple habits to improve your health.",
@@ -253,9 +256,9 @@ namespace FA.JustBlog.Core.Migrations
                         {
                             Id = 4,
                             CategoryId = 2,
-                            Modified = new DateTime(2025, 1, 4, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6362),
+                            Modified = new DateTime(2025, 1, 4, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6202),
                             PostContent = "In this post, we explore Entity Framework Core and how to use it effectively in modern .NET applications.",
-                            PostedOn = new DateTime(2025, 1, 3, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6361),
+                            PostedOn = new DateTime(2025, 1, 3, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6202),
                             Published = true,
                             RateCount = 8,
                             ShortDescription = "A complete guide to learn EF Core.",
@@ -268,9 +271,9 @@ namespace FA.JustBlog.Core.Migrations
                         {
                             Id = 5,
                             CategoryId = 1,
-                            Modified = new DateTime(2025, 1, 4, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6365),
+                            Modified = new DateTime(2025, 1, 4, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6204),
                             PostContent = "This comprehensive guide covers everything you need to know to start building robust web applications using ASP.NET Core, from setup to deployment.",
-                            PostedOn = new DateTime(2025, 1, 4, 12, 34, 34, 387, DateTimeKind.Utc).AddTicks(6365),
+                            PostedOn = new DateTime(2025, 1, 4, 12, 25, 21, 971, DateTimeKind.Utc).AddTicks(6204),
                             Published = true,
                             RateCount = 15,
                             ShortDescription = "A complete guide to learn ASP.NET Core.",
@@ -283,9 +286,9 @@ namespace FA.JustBlog.Core.Migrations
                         {
                             Id = 6,
                             CategoryId = 3,
-                            Modified = new DateTime(2025, 1, 4, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6368),
+                            Modified = new DateTime(2025, 1, 4, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6207),
                             PostContent = "From stunning beaches to cultural landmarks, discover the top five travel destinations for 2024 and plan your next adventure.",
-                            PostedOn = new DateTime(2025, 1, 4, 14, 29, 34, 387, DateTimeKind.Utc).AddTicks(6367),
+                            PostedOn = new DateTime(2025, 1, 4, 14, 20, 21, 971, DateTimeKind.Utc).AddTicks(6206),
                             Published = true,
                             RateCount = 20,
                             ShortDescription = "Explore the best places to visit in 2024.",
@@ -298,9 +301,9 @@ namespace FA.JustBlog.Core.Migrations
                         {
                             Id = 7,
                             CategoryId = 3,
-                            Modified = new DateTime(2025, 1, 4, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6370),
+                            Modified = new DateTime(2025, 1, 4, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6209),
                             PostContent = "This post shares ten delicious vegan recipes that are easy to make and packed with flavor. Perfect for anyone looking to explore plant-based meals.",
-                            PostedOn = new DateTime(2024, 12, 30, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6370),
+                            PostedOn = new DateTime(2024, 12, 30, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6209),
                             Published = true,
                             RateCount = 10,
                             ShortDescription = "Easy and healthy vegan recipes to try.",
@@ -313,9 +316,9 @@ namespace FA.JustBlog.Core.Migrations
                         {
                             Id = 8,
                             CategoryId = 1,
-                            Modified = new DateTime(2025, 1, 4, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6372),
+                            Modified = new DateTime(2025, 1, 4, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6212),
                             PostContent = "Artificial intelligence is reshaping healthcare. This post explores the latest advancements and the potential impact AI could have on patient care and medical research.",
-                            PostedOn = new DateTime(2024, 12, 28, 14, 34, 34, 387, DateTimeKind.Utc).AddTicks(6372),
+                            PostedOn = new DateTime(2024, 12, 28, 14, 25, 21, 971, DateTimeKind.Utc).AddTicks(6211),
                             Published = true,
                             RateCount = 18,
                             ShortDescription = "How AI is transforming the healthcare industry.",

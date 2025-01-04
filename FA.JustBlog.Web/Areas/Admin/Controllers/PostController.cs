@@ -10,7 +10,7 @@ using FA.JustBlog.Web.Areas.Admin.Models.Post;
 namespace FA.JustBlog.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-   
+
     public class PostController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -65,7 +65,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
                     break;
             }
 
-           
+
 
             return View(posts);
         }
@@ -124,7 +124,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
             return View();
         }
 
-      
+
         // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -164,6 +164,20 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
                     // Thêm tất cả liên kết vào bảng PostTagMap
                     _unitOfWork.PostTagMaps.AddRange(postTags);
                     _unitOfWork.SaveChanges();
+
+                    // Cập nhật số lượng bài viết của từng tag
+                    foreach (var tagId in model.Tags)
+                    {
+                        var tag = _unitOfWork.Tags.Find(tagId);
+                        if (tag != null)
+                        {
+                            // Cập nhật lại số lượng bài viết của tag
+                            tag.Count = _unitOfWork.PostTagMaps.CountByTagId(tagId);
+                            _unitOfWork.Tags.Update(tag);
+                        }
+                    }
+
+                    _unitOfWork.SaveChanges();  // Lưu các thay đổi liên quan đến tag
                 }
 
                 return RedirectToAction(nameof(Index));
@@ -174,6 +188,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
             ViewBag.Tags = new SelectList(_unitOfWork.Tags.GetAll(), "Id", "Name");  // Cung cấp danh sách tag
             return View(model);
         }
+
 
         // GET: Edit
         [Authorize(Roles = "Contributor, BlogOwner")]
@@ -239,18 +254,30 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
                 {
                     _unitOfWork.PostTagMaps.Delete(existingTag);
                 }
+                if (model.Tags == null || model.Tags.Count == 0)
+                {
+                    ModelState.AddModelError("Tags", "At least one tag must be selected.");
+                    ViewBag.Tags = new SelectList(_unitOfWork.Tags.GetAll(), "Id", "Name");
+                    return View(model);
+                }
 
                 // Add the new tags
                 if (model.Tags != null)
                 {
                     foreach (var tagId in model.Tags)
                     {
+                        var tag = _unitOfWork.Tags.Find(tagId);
                         var postTagMap = new PostTagMap
                         {
                             PostId = post.Id,
                             TagId = tagId
                         };
                         _unitOfWork.PostTagMaps.Add(postTagMap);
+                        var postCount = _unitOfWork.PostTagMaps.CountByTagId(tagId);
+
+                        // Update the tag's post count
+                        tag.Count = postCount;
+                        _unitOfWork.Tags.Update(tag);
                     }
                 }
                 // Cập nhật bài viết trong cơ sở dữ liệu

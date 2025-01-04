@@ -7,37 +7,12 @@
 
 <h1>All posts!</h1>
 <div class="input-group w-50">
-
     <input type="search" id="searchBox" class="form-control" placeholder="Search here..." aria-label="Search" aria-describedby="search-addon">
 </div>
+
 <div id="posts-list">
-    @Html.Partial("_PostListPartial", Model) <!-- Render the list of posts -->
+    @Html.Partial("_PostListPartial", Model) <!-- Render the initial list of posts -->
 </div>
-@foreach (var post in Model)
-{
-    <div style="border-bottom: 1px solid #ccc; padding: 15px 0;">
-        <!-- Tiêu đề bài viết -->
-        <h2>
-            <a asp-action="Details" asp-controller="Post"
-               asp-route-year="@post.PostedOn.Year"
-               asp-route-month="@post.PostedOn.Month.ToString("00")"
-               asp-route-title="@post.UrlSlug">
-                @post.Title
-            </a>
-        </h2>
-
-        <!-- Thông tin ngày đăng, đánh giá, lượt xem -->
-        <p>
-            <small>
-                Posted @post.PostedOn.ToFriendlyTime()
-                with rate @post.TotalRate by @post.ViewCount view(s)
-            </small>
-        </p>
-
-        <!-- Nội dung bài viết -->
-        <p>@Html.Raw(post.PostContent)</p>
-    </div>
-}
 
 @section scripts {
     <script>
@@ -51,8 +26,8 @@
                     type: 'GET',
                     data: { searchTerm: searchTerm }, // Send the search term
                     success: function (data) {
-                        // Update the posts list with the search results
-                        $('#posts-list').html(data); // Replace posts list with the new search result
+                        // Replace the posts list with the new search results
+                        $('#posts-list').html(data);
                     },
                     error: function () {
                         alert('Error searching posts.');

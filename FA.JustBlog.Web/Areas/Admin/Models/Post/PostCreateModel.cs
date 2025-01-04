@@ -27,6 +27,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Models.Post
         [Range(1, int.MaxValue, ErrorMessage = "Category must be selected.")]
         public int CategoryId { get; set; }
 
+        [Required(ErrorMessage = "Tags is required.")]
         public List<int> Tags { get; set; }
     }
 }

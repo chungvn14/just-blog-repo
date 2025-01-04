@@ -3,6 +3,7 @@
 @foreach (var post in Model)
 {
     <div style="border-bottom: 1px solid #ccc; padding: 15px 0;">
+        <!-- Tiêu đề bài viết -->
         <h2>
             <a asp-action="Details" asp-controller="Post"
                asp-route-year="@post.PostedOn.Year"
@@ -11,7 +12,16 @@
                 @post.Title
             </a>
         </h2>
-        <p><small>Posted on @post.PostedOn.ToString("MMMM dd, yyyy")</small></p>
+
+        <!-- Thông tin ngày đăng, đánh giá, lượt xem -->
+        <p>
+            <small>
+                Posted @post.PostedOn.ToFriendlyTime()
+                with rate @post.TotalRate by @post.ViewCount view(s)
+            </small>
+        </p>
+
+        <!-- Nội dung bài viết -->
         <p>@Html.Raw(post.PostContent)</p>
     </div>
 }

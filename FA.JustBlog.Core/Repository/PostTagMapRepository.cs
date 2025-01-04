@@ -24,5 +24,9 @@ namespace FA.JustBlog.Core.Repository
         {
             _context.PostTagMaps.AddRange(postTagMaps);
         }
+        public int CountByTagId(int tagId)
+        {
+            return _context.PostTagMaps.Count(ptm => ptm.TagId == tagId);
+        }
     }
 }

@@ -12,7 +12,7 @@ namespace FA.JustBlog.Core.IRepository
     public interface IPostTagMapRepository : IGenericRepository<PostTagMap>
     {
         void AddRange(IEnumerable<PostTagMap> postTagMaps);
-        
 
+        int CountByTagId(int tagId);
     }
 }

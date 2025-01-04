@@ -105,22 +105,7 @@ using (var scope = app.Services.CreateScope())
     }
 
 }
-using (var scope = app.Services.CreateScope())
-{
-    var userManger = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
-    string email = "user@user.com";
-    string password = "Test1234";
-    if (await userManger.FindByEmailAsync(email) == null)
-    {
-        var user = new User();
-        user.UserName = email;
-        user.Email = email;
 
-        await userManger.CreateAsync(user, password);
-        await userManger.AddToRoleAsync(user, "User");
-    }
-
-}
 using (var scope = app.Services.CreateScope())
 {
     var userManger = scope.ServiceProvider.GetRequiredService<UserManager<User>>();

@@ -7,7 +7,15 @@
     }
 
     .card-body {
+        display: flex;
+        flex-direction: column;
         flex-grow: 1;
+        justify-content: space-between;
+    }
+
+    .card-footer {
+        display: flex;
+        justify-content: flex-end;
     }
 </style>
 
@@ -42,7 +50,7 @@ else
                            asp-route-year="@post.PostedOn.Year"
                            asp-route-month="@post.PostedOn.Month.ToString("00")"
                            asp-route-title="@post.UrlSlug"
-                           class="btn btn-primary">Xem chi tiết</a>
+                           class="btn btn-primary">Read More</a>
                     </div>
                     <div class="card-footer text-muted">
                         <small>Ngày đăng: @post.PostedOn.ToString("dd/MM/yyyy")</small> <!-- Ngày đăng bài viết -->
