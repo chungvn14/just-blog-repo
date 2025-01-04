@@ -1,0 +1,25 @@
+﻿@model IEnumerable<FA.JustBlog.Core.Models.Comment>
+
+<div class="mb-4">
+    @foreach (var comment in Model)
+    {
+        <div class="card shadow-sm mb-3" id="comment-@comment.Id">
+            <div class="card-body">
+                <!-- Comment Header -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                        <strong>@comment.Name</strong>
+                        <small class="text-muted ml-2">@comment.CommentTime.ToString("MMMM dd, yyyy")</small>
+                    </div>
+                    @if (comment.Name == User.Identity.Name)
+                    {
+                        <button class="btn btn-danger btn-sm delete-comment" data-id="@comment.Id">Delete</button>
+                    }
+                </div>
+
+                <!-- Comment Text -->
+                <p>@comment.CommentText</p>
+            </div>
+        </div>
+    }
+</div>

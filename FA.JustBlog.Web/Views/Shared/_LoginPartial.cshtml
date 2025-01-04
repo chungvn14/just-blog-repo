@@ -1,22 +1,41 @@
 ﻿@using FA.JustBlog.Core.Models
 @using Microsoft.AspNetCore.Identity;
-@inject SignInManager<User> signInManager;
+
+@inject UserManager<User> userManager
+@inject SignInManager<User> signInManager
 
 <ul class="navbar-nav ms-auto">
     @if (signInManager.IsSignedIn(User))
     {
+        var user = await userManager.GetUserAsync(User); // Lấy người dùng hiện tại
+        var roles = await userManager.GetRolesAsync(user); // Lấy danh sách các vai trò của người dùng
+
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Logout</a>
+            <a class="nav-link text-light">Hello, @user.UserName</a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link text-light">Role: @string.Join(", ", roles)</a>
+        </li>
+
+        @if (roles.Contains("BlogOwner") || roles.Contains("Contributor"))  
+        {
+            <li class="nav-item">
+                <a class="nav-link text-light" asp-area="Admin" asp-controller="Home" asp-action="AdminHome">Admin Panel</a>
+            </li>
+        }
+
+        <li class="nav-item">
+            <a class="nav-link text-light" asp-controller="Account" asp-action="Logout">Logout</a>
         </li>
     }
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Login</a>
+            <a class="nav-link text-light" asp-controller="Account" asp-action="Login">Login</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Register</a>
+            <a class="nav-link text-light" asp-controller="Account" asp-action="Register">Register</a>
         </li>
     }
-
 </ul>

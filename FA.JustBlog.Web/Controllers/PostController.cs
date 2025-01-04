@@ -35,10 +35,27 @@ namespace FA.JustBlog.Web.Controllers
             ViewData["RelatedTags"] = tags;
 
             ViewData["HidePopularTags"] = true;
-
+            post.Comments = _unitOfWork.Comments.GetCommentsForPost(post.Id);
+            post.ViewCount++;
+            _unitOfWork.SaveChanges();
             return View(post);
         }
 
+        // PostController.cs
+        public IActionResult SearchPosts(string searchTerm)
+        {
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                return PartialView("_PostListPartial", _unitOfWork.Posts.GetPublisedPosts()); // Get all posts if search term is empty
+            }
+
+            var searchResults = _unitOfWork.Posts.GetPublisedPosts()
+                .Where(post => post.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase) ||
+                               post.PostContent.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            return PartialView("_PostListPartial", searchResults);
+        }
 
         public IActionResult ListPosts()
         {

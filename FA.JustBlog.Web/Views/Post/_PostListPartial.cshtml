@@ -1,0 +1,17 @@
+﻿@model IEnumerable<FA.JustBlog.Core.Models.Post>
+
+@foreach (var post in Model)
+{
+    <div style="border-bottom: 1px solid #ccc; padding: 15px 0;">
+        <h2>
+            <a asp-action="Details" asp-controller="Post"
+               asp-route-year="@post.PostedOn.Year"
+               asp-route-month="@post.PostedOn.Month.ToString("00")"
+               asp-route-title="@post.UrlSlug">
+                @post.Title
+            </a>
+        </h2>
+        <p><small>Posted on @post.PostedOn.ToString("MMMM dd, yyyy")</small></p>
+        <p>@Html.Raw(post.PostContent)</p>
+    </div>
+}

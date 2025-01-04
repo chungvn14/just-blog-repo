@@ -6,7 +6,13 @@
 }
 
 <h1>All posts!</h1>
+<div class="input-group w-50">
 
+    <input type="search" id="searchBox" class="form-control" placeholder="Search here..." aria-label="Search" aria-describedby="search-addon">
+</div>
+<div id="posts-list">
+    @Html.Partial("_PostListPartial", Model) <!-- Render the list of posts -->
+</div>
 @foreach (var post in Model)
 {
     <div style="border-bottom: 1px solid #ccc; padding: 15px 0;">
@@ -31,4 +37,28 @@
         <!-- Nội dung bài viết -->
         <p>@Html.Raw(post.PostContent)</p>
     </div>
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            // Send AJAX request when search term is changed
+            $('#searchBox').on('input', function () {
+                var searchTerm = $(this).val(); // Get the value from search box
+
+                $.ajax({
+                    url: '@Url.Action("SearchPosts", "Post")', // Controller action to handle search
+                    type: 'GET',
+                    data: { searchTerm: searchTerm }, // Send the search term
+                    success: function (data) {
+                        // Update the posts list with the search results
+                        $('#posts-list').html(data); // Replace posts list with the new search result
+                    },
+                    error: function () {
+                        alert('Error searching posts.');
+                    }
+                });
+            });
+        });
+    </script>
 }
