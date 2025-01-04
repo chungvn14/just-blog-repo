@@ -15,6 +15,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Comment
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Index()
         {
             var comment = _unitOfWork.Comments.GetAllCommentsWithPosts();
@@ -23,6 +24,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
 
 
         // GET: Admin/Comment/Delete/5
+        [Authorize(Roles = "BlogOwner")]
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -43,6 +45,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "BlogOwner")]
         public IActionResult DeleteConfirmed(int id)
         {
             var comment = _unitOfWork.Comments.Find(id); // No async, find comment synchronously

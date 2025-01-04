@@ -10,6 +10,10 @@ namespace FA.JustBlog.Core.Models
     public class User : IdentityUser
     {
         public string? FullName { get; set; }
+        public async Task<IList<string>> GetRolesAsync(UserManager<User> userManager)
+        {
+            return await userManager.GetRolesAsync(this);
+        }
     }
    
 }

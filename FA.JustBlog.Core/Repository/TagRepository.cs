@@ -35,5 +35,13 @@ namespace FA.JustBlog.Core.Repository
 
             return topTags;
         }
+        public IList<Tag> GetAllTagsByPost(int postId)
+        {
+            return _context.PostTagMaps
+                           .Where(ptm => ptm.PostId == postId)
+                           .Select(ptm => ptm.Tag)
+                           .ToList();
+        }
+
     }
 }

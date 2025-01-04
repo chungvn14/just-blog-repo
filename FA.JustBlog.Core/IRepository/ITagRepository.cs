@@ -13,6 +13,6 @@ namespace FA.JustBlog.Core.IRepository
         //Lay tag bang URL
         Tag GetTagByUrlSlug(string urlSlug);
         IList<Tag> GetTopTags(int topCount);
-        
+        IList<Tag> GetAllTagsByPost(int postId);
     }
 }

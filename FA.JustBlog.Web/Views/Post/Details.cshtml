@@ -5,74 +5,86 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="text-center mb-4">Post Details</h1>
+<div class="container mt-5">
+    <!-- Post Title -->
+    <h1 class="text-center text-primary mb-4 display-3">@Model.Title</h1>
 
-<div class="card shadow-sm p-4">
-    <h4 class="card-title text-primary">@Model.Title</h4>
-    <hr />
-
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">Short Description:</div>
-        <div class="col-sm-9">@Model.ShortDescription</div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">Post Content:</div>
-        <div class="col-sm-9">  @Html.Raw(Model.PostContent)</div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">URL Slug:</div>
-        <div class="col-sm-9">@Model.UrlSlug</div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">Published:</div>
-        <div class="col-sm-9">
+    <!-- Post Meta Info (Category, Date, Published Status) -->
+    <div class="text-center mb-4 text-muted">
+        <span class="mr-3"><strong>Category:</strong> @Model.Category.Name</span>
+        <span class="mr-3"><strong>Posted on:</strong> @Model.PostedOn.ToString("MMMM dd, yyyy")</span>
+        <span class="mr-3">
+            <strong>Status:</strong>
             @if (Model.Published)
             {
-                <span>Published</span>
+                <span class="badge badge-success">Published</span>
             }
             else
             {
-                <span>Unpublished</span>
+                <span class="badge badge-danger">Unpublished</span>
             }
+        </span>
+    </div>
+
+    <!-- Post Content (Main Body) -->
+    <div class="card shadow-sm mb-5">
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-12">
+                    <h4 class="font-weight-bold text-primary">Short Description:</h4>
+                    <p class="lead">@Model.ShortDescription</p>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12">
+                    <h4 class="font-weight-bold text-primary">Content:</h4>
+                    <div class="post-content">@Html.Raw(Model.PostContent)</div>
+                </div>
+            </div>
         </div>
     </div>
 
+    <!-- Related Tags Section -->
+    <div class="mb-4">
+        <h4 class="font-weight-bold text-primary">Related Tags:</h4>
+        @if (ViewData["RelatedTags"] != null)
+        {
+            var tags = ViewData["RelatedTags"] as IEnumerable<FA.JustBlog.Core.Models.Tag>;
+            foreach (var tag in tags)
+            {
+                <a class="badge badge-secondary mr-2" href="@Url.Action("ListPostsByTag", "Post", new {tag = tag.Name})">
+                    @tag.Name
+                </a>
 
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">Posted On:</div>
-        <div class="col-sm-9">@Model.PostedOn.ToString("MM/dd/yyyy hh:mm:ss tt")</div>
+            }
+        }
+        else
+        {
+            <span>No related tags found.</span>
+        }
     </div>
 
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">Last Modified:</div>
-        <div class="col-sm-9">@Html.DisplayFor(model => model.Modified)</div>
+    <!-- Post Stats (Views, Rate Count, Total Rate) -->
+    <div class="row mb-4 text-center">
+        <div class="col-sm-4">
+            <h5 class="font-weight-bold">Views:</h5>
+            <p class="lead">@Model.ViewCount</p>
+        </div>
+
+        <div class="col-sm-4">
+            <h5 class="font-weight-bold">Rate Count:</h5>
+            <p class="lead">@Model.RateCount</p>
+        </div>
+
+        <div class="col-sm-4">
+            <h5 class="font-weight-bold">Total Rate:</h5>
+            <p class="lead">@Model.TotalRate</p>
+        </div>
     </div>
 
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">Category:</div>
-        <div class="col-sm-9">@Model.Category.Name</div>
+    <!-- Back Button -->
+    <div class="text-center mt-4">
+        <a asp-action="Index" class="btn btn-lg btn-outline-primary">Back to List</a>
     </div>
-
-
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">Views:</div>
-        <div class="col-sm-9">@Model.ViewCount</div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">Rate Count:</div>
-        <div class="col-sm-9">@Model.RateCount</div>
-    </div>
-
-    <div class="row mb-3">
-        <div class="col-sm-3 font-weight-bold">Total Rate:</div>
-        <div class="col-sm-9">@Model.TotalRate</div>
-    </div>
-</div>
-
-<div class="mt-4 text-center">
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
 </div>

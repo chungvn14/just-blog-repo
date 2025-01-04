@@ -83,7 +83,10 @@
             </div>
 
             <div class="col-lg-3">
-                @await Component.InvokeAsync("PopularTags")
+                @if (!ViewData.ContainsKey("HidePopularTags") || !ViewData["HidePopularTags"].Equals(true))
+                {
+                    @await Component.InvokeAsync("PopularTags")
+                }
             </div>
 
 

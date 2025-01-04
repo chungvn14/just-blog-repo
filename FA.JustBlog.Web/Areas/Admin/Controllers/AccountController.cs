@@ -1,10 +1,13 @@
 ﻿using FA.JustBlog.Core.Models;
+using FA.JustBlog.Web.Areas.Admin.Models.Account;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FA.JustBlog.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class AccountController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -15,76 +18,186 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
             _userManager = userManager;
             _roleManager = roleManager;
         }
-
-
-        public async Task<IActionResult> Index()
+        [Authorize(Roles = "Contributor, BlogOwner")]
+        public IActionResult Index()
         {
             var users = _userManager.Users.ToList();
-            return View(users);
+            var userRoles = new List<UserWithRoles>();
+
+            foreach (var user in users)
+            {
+                var roles = _userManager.GetRolesAsync(user).Result;
+
+                userRoles.Add(new UserWithRoles
+                {
+                    User = user,
+                    Roles = roles.ToList()
+                });
+            }
+
+            return View(userRoles); // Ensure this matches the view model  
+        }
+        [Authorize(Roles = "BlogOwner")]
+        public IActionResult Create()
+        {
+            var roles = _roleManager.Roles.Select(r => new RoleViewModel
+            {
+                RoleName = r.Name,
+                IsSelected = false
+            }).ToList();
+
+            var model = new CreateUserViewModel
+            {
+                Roles = roles // Ensure this is not null  
+            };
+
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> CreateUser(string userName, string password)
+        [Authorize(Roles = "BlogOwner")]
+        public async Task<IActionResult> Create(CreateUserViewModel model)
         {
-            var user = new User { UserName = userName };
-            var result = await _userManager.CreateAsync(user, password);
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Debugging: kiểm tra xem model.Roles có đúng không  
+            foreach (var role in model.Roles)
+            {
+                // Kiểm tra dữ liệu  
+                Console.WriteLine($"Role: {role.RoleName}, IsSelected: {role.IsSelected}");
+            }
+
+            var user = new User { UserName = model.UserName, Email = model.Email };
+            var result = await _userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
-                // Có thể phân quyền hoặc thực hiện thêm các bước khác sau khi tạo thành công.
-                return Ok("User created successfully.");
-            }
-
-            return BadRequest(result.Errors);
-        }
-        [HttpGet]
-        public async Task<IActionResult> GetUser(string userId)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                return Ok(user);
-            }
-
-            return NotFound("User not found");
-        }
-        [HttpPost]
-        public async Task<IActionResult> UpdateUser(string userId, string newUserName)
-        {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
-            {
-                user.UserName = newUserName;
-                var result = await _userManager.UpdateAsync(user);
-
-                if (result.Succeeded)
+                var selectedRoles = model.Roles?.Where(r => r.IsSelected).Select(r => r.RoleName).ToList();
+                if (selectedRoles != null && selectedRoles.Count > 0)
                 {
-                    return Ok("User updated successfully.");
+                    foreach (var role in selectedRoles)
+                    {
+                        var addToRoleResult = await _userManager.AddToRoleAsync(user, role);
+                        if (!addToRoleResult.Succeeded)
+                        {
+                            // Xử lý lỗi  
+                            foreach (var error in addToRoleResult.Errors)
+                            {
+                                ModelState.AddModelError(string.Empty, error.Description);
+                            }
+                        }
+                    }
                 }
-
-                return BadRequest(result.Errors);
+                return RedirectToAction(nameof(Index));
             }
 
-            return NotFound("User not found");
+            return View(model);
         }
+       
+        [HttpGet]
+        [Route("Admin/Account/Edit/{Id?}")]
+        [Authorize(Roles = "BlogOwner")]
+        public async Task<IActionResult> Edit(string? Id)
+        {
+            Console.WriteLine("User ID: " + Id);
+
+            var user = await _userManager.FindByIdAsync(Id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var roles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
+            var userRoles = (await _userManager.GetRolesAsync(user)).ToList();
+
+            var model = new EditUserViewModel
+            {
+                UserId = user.Id,
+                UserName = user.UserName,
+                Email = user.Email,
+                AllRoles = roles,
+                SelectedRoles = userRoles ?? new List<string>() // Ensure SelectedRoles is not null
+            };
+
+            return View(model);
+        }
+
         [HttpPost]
+        [Authorize(Roles = "BlogOwner")]
+        public async Task<IActionResult> Edit(EditUserViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                // Reload roles if ModelState fails
+                model.AllRoles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
+                model.SelectedRoles ??= new List<string>();
+                return View(model);
+            }
+
+            var user = await _userManager.FindByIdAsync(model.UserId);
+            if (user == null)
+            {
+                return NotFound("User not found.");
+            }
+
+            // Current roles
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            // Roles to add and remove
+            var rolesToAdd = model.SelectedRoles.Except(currentRoles).ToList();
+            var rolesToRemove = currentRoles.Except(model.SelectedRoles).ToList();
+
+            // Update roles
+            var addResult = await _userManager.AddToRolesAsync(user, rolesToAdd);
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, rolesToRemove);
+
+            if (!addResult.Succeeded || !removeResult.Succeeded)
+            {
+                ModelState.AddModelError("", "Failed to update roles.");
+                model.AllRoles = await _roleManager.Roles.Select(r => r.Name).ToListAsync();
+                return View(model);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+
+
+        [HttpPost]
+        [Authorize(Roles = "BlogOwner")]
         public async Task<IActionResult> DeleteUser(string userId)
         {
-            var user = await _userManager.FindByIdAsync(userId);
-            if (user != null)
+            if (string.IsNullOrWhiteSpace(userId))
             {
-                var result = await _userManager.DeleteAsync(user);
-
-                if (result.Succeeded)
-                {
-                    return Ok("User deleted successfully.");
-                }
-
-                return BadRequest(result.Errors);
+                TempData["ErrorMessage"] = "User ID is required.";
+                return RedirectToAction("Index"); // Thay "Index" thành tên action mà bạn đang sử dụng  
             }
 
-            return NotFound("User not found");
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                TempData["ErrorMessage"] = "User not found.";
+                return RedirectToAction("Index");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = "User deleted successfully.";
+            }
+            else
+            {
+                var errors = string.Join(", ", result.Errors.Select(e => e.Description));
+                TempData["ErrorMessage"] = $"Error deleting user: {errors}";
+            }
+
+            return RedirectToAction("Index"); // Trở về danh sách người dùng  
         }
+
         [HttpPost]
+        [Authorize(Roles = "BlogOwner")]
         public async Task<IActionResult> AssignRole(string userId, string roleName)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -102,6 +215,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
             return NotFound("User not found");
         }
         [HttpGet]
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public async Task<IActionResult> GetUsersAndRoles()
         {
             var users = _userManager.Users.ToList();
@@ -109,36 +223,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
 
             return Ok(new { Users = users, Roles = roles });
         }
-        public async Task<IActionResult> CreateRole(string roleName)
-        {
-            var roleExist = await _roleManager.RoleExistsAsync(roleName);
-            if (!roleExist)
-            {
-                var result = await _roleManager.CreateAsync(new IdentityRole(roleName));
-                if (result.Succeeded)
-                {
-                    return Ok("Role created successfully");
-                }
-                return BadRequest(result.Errors);
-            }
+        
 
-            return BadRequest("Role already exists");
-        }
-
-        // Xóa role
-        public async Task<IActionResult> DeleteRole(string roleName)
-        {
-            var role = await _roleManager.FindByNameAsync(roleName);
-            if (role != null)
-            {
-                var result = await _roleManager.DeleteAsync(role);
-                if (result.Succeeded)
-                {
-                    return Ok("Role deleted successfully");
-                }
-                return BadRequest(result.Errors);
-            }
-            return NotFound("Role not found");
-        }
     }
 }

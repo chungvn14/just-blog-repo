@@ -45,14 +45,15 @@ namespace FA.JustBlog.Core.Repository
                            .Take(size)
                            .ToList();
         }
-       
+
 
         public IList<Post> GetPostsByCategory(string category)
         {
             return _context.Posts
-                           .Where(p => p.Category.Name == category)
+                           .Where(p => p.Category.Name == category && p.Published == true)
                            .ToList();
         }
+
 
         public IList<Post> GetPostsByMonth(DateTime monthYear)
         {
@@ -64,9 +65,10 @@ namespace FA.JustBlog.Core.Repository
         public IList<Post> GetPostsByTag(string tag)
         {
             return _context.Posts
-                           .Where(p => p.PostTagMaps.Any(ptm => ptm.Tag.Name == tag))
+                           .Where(p => p.PostTagMaps.Any(ptm => ptm.Tag.Name == tag) && p.Published == true)
                            .ToList();
         }
+
 
 
         public IList<Post> GetPublishedPosts()
@@ -125,7 +127,7 @@ namespace FA.JustBlog.Core.Repository
 
         public IList<Post> GetLatestPost(int pageNumber, int pageSize)
         {
-            return _context.Posts
+            return _context.Posts.Where(p => p.Published)
                            .OrderByDescending(p => p.PostedOn)
                            .Skip((pageNumber - 1) * pageSize) // Bỏ qua các bài viết của trang trước
                            .Take(pageSize)                  // Lấy bài viết của trang hiện tại
@@ -138,7 +140,7 @@ namespace FA.JustBlog.Core.Repository
 
         public IEnumerable<Post> GetMostViewedPosts()
         {
-            return _context.Posts.OrderByDescending(p => p.ViewCount);
+            return _context.Posts.Where(p => p.Published).OrderByDescending(p => p.ViewCount);
         }
 
         public IEnumerable<Post> GetMostInterestingPosts()

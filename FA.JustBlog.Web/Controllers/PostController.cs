@@ -17,22 +17,28 @@ namespace FA.JustBlog.Web.Controllers
         // GET: Post
         public IActionResult Index()
         {
-            var posts = _unitOfWork.Posts.GetAll();
+            var posts = _unitOfWork.Posts.GetPublisedPosts();
             return View(posts);
         }
 
         // GET: Post/Details/5
         public IActionResult Details(int year, int month, string title)
         {
-
             var post = _unitOfWork.Posts.FindPost(year, month, title);
             if (post == null)
             {
                 return NotFound();
             }
 
+            // Get related tags for this post
+            var tags = _unitOfWork.Tags.GetAllTagsByPost(post.Id); // Assuming this method exists
+            ViewData["RelatedTags"] = tags;
+
+            ViewData["HidePopularTags"] = true;
+
             return View(post);
         }
+
 
         public IActionResult ListPosts()
         {

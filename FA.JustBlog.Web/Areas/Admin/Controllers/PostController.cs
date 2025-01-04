@@ -72,7 +72,27 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
 
 
 
+        [HttpPost]
+        [Authorize(Roles = "BlogOwner")]
+        public IActionResult ChangePublishStatus(int id)
+        {
+            var post = _unitOfWork.Posts.GetPostWithCategory(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
 
+            // Toggle the publish status
+            post.Published = !post.Published;
+
+            // Update the post in the database
+            _unitOfWork.Posts.Update(post);
+            _unitOfWork.SaveChanges();
+
+            TempData["SuccessMessage"] = post.Published ? "Post has been published." : "Post has been unpublished.";
+
+            return RedirectToAction("Details", new { id = post.Id });
+        }
 
         // GET: Admin/Post/Details/5
         [Authorize(Roles = "Contributor, BlogOwner")]
@@ -104,7 +124,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
             return View();
         }
 
-        // POST: Create
+      
         // POST: Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -119,7 +139,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
                     ShortDescription = model.ShortDescription,
                     PostedOn = model.PostedOn,
                     CategoryId = model.CategoryId,
-                    Published = model.Published,
+                    Published = false,
                     PostContent = model.PostContent,
                     UrlSlug = model.Title.ToLower().Replace(" ", "-"),
                     Modified = DateTime.Now,
@@ -175,10 +195,12 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
                 ShortDescription = post.ShortDescription,
                 PostContent = post.PostContent,
                 PostedOn = post.PostedOn,
-                Published = post.Published,
                 CategoryId = post.CategoryId,
-                Tags = post.PostTagMaps.Select(ptm => ptm.TagId).ToList() // Sử dụng ToList() thay vì ToArray()
+                Tags = post.PostTagMaps != null && post.PostTagMaps.Any()
+             ? post.PostTagMaps.Select(ptm => ptm.TagId).ToList()
+             : null // If no tags, assign null instead of an empty list
             };
+
 
             ViewBag.CategoryId = new SelectList(_unitOfWork.Categories.GetAll(), "Id", "Name", post.CategoryId);
             ViewBag.Tags = new SelectList(_unitOfWork.Tags.GetAll(), "Id", "Name");
@@ -208,7 +230,6 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
                 post.ShortDescription = model.ShortDescription;
                 post.PostContent = model.PostContent;
                 post.PostedOn = model.PostedOn;
-                post.Published = model.Published;
                 post.CategoryId = model.CategoryId;
                 post.UrlSlug = model.Title.ToLower().Replace(" ", "-");
                 post.Modified = DateTime.Now;

@@ -27,10 +27,13 @@
         </dl>
 
         <div class="d-flex justify-content-between mt-4">
-            <form asp-action="Delete" class="mr-3">
-                <input type="hidden" asp-for="Id" />
-                <button type="submit" class="btn btn-lg btn-danger">Delete</button>
-            </form>
+            @if (User.IsInRole("BlogOwner"))
+            {
+                <form asp-action="Delete" class="mr-3">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-lg btn-danger">Delete</button>
+                </form>
+            }
             <a asp-action="Index" class="btn btn-lg btn-secondary">Back to List</a>
         </div>
     </div>

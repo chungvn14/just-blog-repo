@@ -128,6 +128,12 @@
                     <span>Manage Account</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-area="Admin" asp-controller="Role" asp-action="Index">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>System Role</span>
+                </a>
+            </li>
         </ul>
 
         <div id="content-wrapper">
@@ -190,11 +196,13 @@
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.19.3/jquery.validate.min.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate.unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
     <!-- CKEditor CDN -->
-   
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script src="~/Admin/ckeditor/ckeditor.js"></script>
     <!-- Custom scripts for all pages-->
     <script src="~/Admin/js/sb-admin.min.js"></script>
-
+    <script src="~/js/paginate.js"></script>
+    <script src="~/js/paginate.min.js"></script>
     <!-- Demo scripts for this page-->
     <script src="~/Admin/js/demo/datatables-demo.js"></script>
     <script src="~/Admin/js/demo/chart-area-demo.js"></script>

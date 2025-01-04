@@ -49,6 +49,15 @@
 <div class="d-flex justify-content-start mt-4">
     <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-lg btn-primary mr-2">Edit</a>
     <a asp-action="Index" class="btn btn-lg btn-secondary">Back to List</a>
+  
+    @if (User.IsInRole("BlogOwner"))
+    {
+        <form asp-action="ChangePublishStatus" asp-route-id="@Model.Id" method="post" class="ml-2">
+            <button type="submit" class="btn btn-lg @(Model.Published ? "btn-warning" : "btn-success")">
+                @(Model.Published ? "Unpublish" : "Publish")
+            </button>
+        </form>
+    }
 </div>
 
 <style>

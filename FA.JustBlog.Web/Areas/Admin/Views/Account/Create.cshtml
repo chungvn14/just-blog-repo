@@ -1,0 +1,54 @@
+﻿@model FA.JustBlog.Web.Areas.Admin.Models.Account.CreateUserViewModel
+
+@{
+    ViewData["Title"] = "Create New User";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create New User</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" class="form-control" />
+        <span asp-validation-for="UserName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+
+    <h3>Roles</h3>
+    <div class="form-group">
+        @if (Model.Roles != null && Model.Roles.Any())
+        {
+            @foreach (var role in Model.Roles)
+            {
+                <div>
+                    <input type="checkbox" asp-for="@role.IsSelected" name="Roles[@Model.Roles.IndexOf(role)].IsSelected" />
+                    <input type="hidden" name="Roles[@Model.Roles.IndexOf(role)].RoleName" value="@role.RoleName" />
+                    <label>@role.RoleName</label>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No roles available.</p>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create User</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}  

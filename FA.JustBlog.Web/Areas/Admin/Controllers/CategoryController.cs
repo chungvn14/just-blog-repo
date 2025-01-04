@@ -14,7 +14,7 @@ using FA.JustBlog.Web.Areas.Admin.Models.Category;
 namespace FA.JustBlog.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "BlogOwner")]
+  
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -25,6 +25,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Category
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Index()
         {
             var category = _unitOfWork.Categories.GetAll();
@@ -32,6 +33,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Category/Details/5
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Details(int? id)
         {
             if (id == null)
@@ -49,6 +51,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Category/Create
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Create()
         {
             return View();
@@ -57,6 +60,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         // POST: Admin/Category/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Create([Bind("Name,UrlSlug,Description")] CategoryCreateModel category)
         {
             if (ModelState.IsValid)
@@ -76,8 +80,9 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
             return View(category);
         }
 
-       
+
         // GET: Admin/Category/Edit/5
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -107,6 +112,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         // POST: Admin/Category/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Edit(int id, [Bind("Id,Name,UrlSlug,Description")] CategoryEditModel category)
         {
             if (id != category.Id)
@@ -142,6 +148,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Category/Delete/5
+        [Authorize(Roles = "BlogOwner")]
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -161,6 +168,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         // POST: Admin/Category/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "BlogOwner")]
         public IActionResult DeleteConfirmed(int id)
         {
             var category = _unitOfWork.Categories.Find(id);

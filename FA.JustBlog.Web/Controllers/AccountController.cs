@@ -26,19 +26,37 @@ namespace FA.JustBlog.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                // Tìm kiếm người dùng theo Email trước, nếu không tìm thấy thì kiểm tra theo Username  
+                var user = await userManager.FindByEmailAsync(model.Email);
+                         
 
-                if (result.Succeeded)
+                // Nếu không tìm thấy người dùng  
+                if (user != null)
                 {
-                    return RedirectToAction("Index", "Home");
+                    // Sử dụng PasswordSignInAsync để xác thực  
+                    var result = await signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Index", "Home"); // Chuyển hướng nếu đăng nhập thành công  
+                    }
+                    else if (result.IsLockedOut)
+                    {
+                        ModelState.AddModelError(string.Empty, "Tài khoản đã bị khóa.");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Email or password is incorrect.");
+                    }
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Email or password is incorrect.");
-                    return View(model);
+                    // Thông báo nếu không tìm thấy người dùng (trường hợp cả email và username không tồn tại)  
+                    ModelState.AddModelError(string.Empty, "Email or password is incorrect.");
                 }
             }
-            return View(model);
+
+            return View(model); // Trả về view nếu Model không hợp lệ hoặc có lỗi khi đăng nhập  
         }
 
         public IActionResult Register()
@@ -46,35 +64,43 @@ namespace FA.JustBlog.Web.Controllers
             return View();
         }
 
+      
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                User User = new User
+                // Tạo một đối tượng User mới  
+                User user = new User
                 {
                     FullName = model.Name,
                     Email = model.Email,
                     UserName = model.Email,
                 };
 
-                var result = await userManager.CreateAsync(User, model.Password);
+                // Tạo người dùng trong hệ thống  
+                var result = await userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
+                    // Gán vai trò "User" cho tài khoản vừa tạo  
+                    await userManager.AddToRoleAsync(user, "User");
+
+                    // Chuyển hướng đến trang đăng nhập nếu thành công  
                     return RedirectToAction("Login", "Account");
                 }
                 else
                 {
+                    // Nếu tạo người dùng không thành công, thêm lỗi vào ModelState  
                     foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError("", error.Description);
                     }
 
-                    return View(model);
+                    return View(model); // Trả về view với mô hình khi xảy ra lỗi  
                 }
             }
-            return View(model);
+            return View(model); // Trả về view nếu Model không hợp lệ  
         }
 
         public IActionResult VerifyEmail()
@@ -87,7 +113,7 @@ namespace FA.JustBlog.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = await userManager.FindByNameAsync(model.Email);
+                var user = await userManager.FindByEmailAsync(model.Email);
 
                 if (user == null)
                 {

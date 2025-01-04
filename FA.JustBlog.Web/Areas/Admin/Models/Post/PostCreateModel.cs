@@ -27,10 +27,6 @@ namespace FA.JustBlog.Web.Areas.Admin.Models.Post
         [Range(1, int.MaxValue, ErrorMessage = "Category must be selected.")]
         public int CategoryId { get; set; }
 
-        // Trạng thái đã xuất bản chưa
-        [Required(ErrorMessage = "Post published status is required.")]
-        public bool Published { get; set; }
-
         public List<int> Tags { get; set; }
     }
 }

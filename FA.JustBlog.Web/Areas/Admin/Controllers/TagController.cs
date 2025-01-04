@@ -11,7 +11,7 @@ using FA.JustBlog.Web.Areas.Admin.Models.Category;
 namespace FA.JustBlog.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    [Authorize(Roles = "BlogOwner")]
+ 
     public class TagController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -22,6 +22,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Tag
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Index()
         {
             var tags = _unitOfWork.Tags.GetAll();
@@ -29,6 +30,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Tag/Details/5
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Details(int? id)
         {
             if (id == null)
@@ -46,6 +48,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Tag/Create
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Create()
         {
             return View();
@@ -54,6 +57,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         // POST: Admin/Tag/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Create([Bind("Name,UrlSlug,Description")] TagCreateModel tag)
         {
           
@@ -75,6 +79,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Tag/Edit/5
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -100,6 +105,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         // POST: Admin/Tag/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Contributor, BlogOwner")]
         public IActionResult Edit(int id, [Bind("Id,Name,UrlSlug,Description,Count")] TagEditModel tag)
         {
             if (id != tag.Id)
@@ -141,6 +147,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // GET: Admin/Tag/Delete/5
+        [Authorize(Roles = "BlogOwner")]
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -158,6 +165,7 @@ namespace FA.JustBlog.Web.Areas.Admin.Controllers
         }
 
         // POST: Admin/Tag/Delete/5
+        [Authorize(Roles = "BlogOwner")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
