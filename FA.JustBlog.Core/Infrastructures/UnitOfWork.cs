@@ -15,6 +15,8 @@ namespace FA.JustBlog.Core.Infrastructures
         private ICategoryRepository _categoryRepository;
         private IPostRepository _postRepository;
         private IPostTagMapRepository _postTagMapRepository;
+        private ICommentRepository _commentRepository;
+        
        
 
         public UnitOfWork(JustBlogContext context)
@@ -37,6 +39,10 @@ namespace FA.JustBlog.Core.Infrastructures
         {
             get => _categoryRepository ??= new CategoryRepository(_context);
         }
+        public ICommentRepository CommentRepository
+        {
+            get => _commentRepository ??= new CommentRepository(_context);
+        }
 
         /// <summary>
         /// Quản lý PostRepository
@@ -50,7 +56,8 @@ namespace FA.JustBlog.Core.Infrastructures
         /// <summary>
         /// Shortcut cho TagRepository
         /// </summary>
-        public ITagRepository Tags => TagRepository;
+        public ITagRepository Tags => TagRepository; 
+        public ICommentRepository Comments => CommentRepository;
 
         /// <summary>
         /// Shortcut cho PostRepository

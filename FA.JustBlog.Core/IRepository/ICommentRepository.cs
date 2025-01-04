@@ -13,5 +13,6 @@ namespace FA.JustBlog.Core.IRepository
         void AddComment(int postId, string commentName, string commentEmail, string commentTitle, string commentBody);
         IList<Comment> GetCommentsForPost(int postId);
         IList<Comment> GetCommentsForPost(Post post);
+        IEnumerable<Comment> GetAllCommentsWithPosts();
     }
 }

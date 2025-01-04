@@ -12,6 +12,7 @@ namespace FA.JustBlog.Core.Infrastructures
         ITagRepository Tags { get; }
         IPostTagMapRepository PostTagMaps { get; }
         IPostRepository Posts { get; }
+        ICommentRepository Comments { get; }
         ICategoryRepository Categories { get; }
         int SaveChanges();
     }

@@ -15,8 +15,8 @@ namespace FA.JustBlog.Core.Repository
 
         public CommentRepository(JustBlogContext context) : base(context)
         {
+            _context = context;
         }
-
         public void AddComment(int postId, string commentName, string commentEmail, string commentTitle, string commentBody)
         {
             var comment = new Comment
@@ -48,5 +48,14 @@ namespace FA.JustBlog.Core.Repository
                            .OrderBy(c => c.CommentTime) 
                            .ToList();
         }
+
+        public IEnumerable<Comment> GetAllCommentsWithPosts()
+        {
+            return _context.Comments
+                           .Include(c => c.Post)
+                           .ToList();
+        }
+
+
     }
 }

@@ -1,0 +1,103 @@
+﻿@model IEnumerable<FA.JustBlog.Core.Models.Comment>
+
+@{
+    ViewData["Title"] = "Manage Comments";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h1 class="mb-4 text-primary">Manage Comments</h1>
+
+            <div class="table-responsive">
+                <div class="table-container">
+                    <table class="table table-hover table-bordered text-center align-middle">
+                        <thead class="thead-dark">
+                            <tr>
+                                <th class="fixed-column">#</th>
+                                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                                <th>@Html.DisplayNameFor(model => model.Email)</th>
+                                <th>@Html.DisplayNameFor(model => model.CommentHeader)</th>
+                                <th>@Html.DisplayNameFor(model => model.CommentText)</th>
+                                <th>@Html.DisplayNameFor(model => model.CommentTime)</th>
+                                <th>@Html.DisplayNameFor(model => model.Post.Title)</th>
+                                <th class="actions-column">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (int i = 0; i < Model.Count(); i++)
+                            {
+                                var item = Model.ElementAt(i);
+                                <tr>
+                                    <td class="fixed-column">@(@i + 1)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Email)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.CommentHeader)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.CommentText)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.CommentTime)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.Post.Title)</td>
+                                    <td class="actions-column">
+                                        <div class="btn-group" role="group">
+                                            
+                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .container-fluid {
+        padding: 20px;
+    }
+
+    .fixed-column {
+        position: sticky;
+        left: 0;
+        background-color: #f8f9fa;
+        z-index: 10;
+    }
+
+    .actions-column {
+        position: sticky;
+        right: 0;
+        background-color: #f8f9fa;
+        z-index: 10;
+    }
+
+    .table-container {
+        overflow-x: auto;
+    }
+
+    .btn-group .btn {
+        margin: 0 2px;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+    }
+
+    .badge {
+        font-size: 14px;
+        padding: 5px 10px;
+    }
+
+    .thead-dark th {
+        background-color: #343a40;
+        color: #fff;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #f1f1f1;
+    }
+</style>
